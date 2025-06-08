@@ -43,7 +43,7 @@ Membangun model regresi prediktif menggunakan dataset `insurance.csv` dari Kaggl
 
 ##  Arsitektur Solusi (Lakehouse Sederhana)
 
-(diagram otw)
+![arsitektur fp bigdata drawio](https://github.com/user-attachments/assets/75ed4fc5-4047-4d34-9b88-7192259ed428)
 
 Walaupun data yang digunakan bersifat statis, pendekatan **data lakehouse** tetap relevan untuk mengatur, menyimpan, dan menganalisis data dalam skala besar dan fleksibel.
 
