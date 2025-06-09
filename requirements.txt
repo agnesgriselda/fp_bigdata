@@ -1,0 +1,7 @@
+kafka-python
+minio
+pandas
+scikit-learn
+streamlit
+fastapi
+uvicorn[standard]
