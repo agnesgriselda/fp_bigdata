@@ -117,6 +117,8 @@ fp-bigdata
    ```
    pip install -r requirements.txt
    ```
+   ![WhatsApp Image 2025-06-10 at 01 02 14_c1644d53](https://github.com/user-attachments/assets/35e88f8f-16c3-45e8-9969-0fc0ebba0300)
+
 2. Buat File docker-compose.yml
    Buat file baru bernama docker-compose.yml. File ini akan menjalankan infrastruktur yang Anda butuhkan (Kafka & MinIO).
    ```
