@@ -436,6 +436,7 @@ fp-bigdata
 ```bash
 python machine_learning/prepare_data.py
 ```
+![Screenshot 2025-06-11 235814](https://github.com/user-attachments/assets/80952490-07eb-43a8-9918-ac82a03b290b)
 
 ## 2. Train Model (train_model.py)
 
@@ -457,17 +458,16 @@ python machine_learning/train_model.py
 ### Buka MinIO Web UI
 Akses antarmuka pengguna MinIO melalui browser: `http://localhost:9001`
 
-
 ### Navigasi ke Bucket `processed-data`
 Pastikan dua file berikut telah berhasil diunggah:
 
 - **`cleaned_insurance_data.csv`** — hasil *data cleaning* dan *feature engineering*
 - **`insurance_model.pkl`** — model Machine Learning yang telah dilatih dan disimpan dalam format pickle
 
-#### Contoh Tampilan:
+#### Dokumentasi Tampilan:
+![Screenshot 2025-06-11 234546](https://github.com/user-attachments/assets/51f8a434-7ac5-4965-bd7f-850b65831a20)
 
-
-### 📌 Catatan Tambahan
+### Notes :
 - Pastikan `producer.py` dan `consumer.py` telah selesai dijalankan sehingga data mentah tersedia di bucket `raw-data`.
 - Skrip `prepare_data.py` dan `train_model.py` menggunakan:
   - **MinIO SDK for Python** untuk komunikasi ke object storage
@@ -479,12 +479,8 @@ Pastikan dua file berikut telah berhasil diunggah:
   - *Encoding* kolom kategorikal (`sex`, `smoker`, `region`)
   - Normalisasi nama kolom agar konsisten
 
----
-
 ### Evaluasi Model
-
-
-
+![Screenshot 2025-06-11 235437](https://github.com/user-attachments/assets/a98edd28-181c-470f-8f37-573da42d5c3f)
 
 ---
 
