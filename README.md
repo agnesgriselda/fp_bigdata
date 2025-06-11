@@ -397,6 +397,95 @@ fp-bigdata
         ```
         ![WhatsApp Image 2025-06-10 at 01 07 06_1d5294c6](https://github.com/user-attachments/assets/3a346ee0-d06f-4f81-9b2f-41d03aeb18d1)
 
+# Langkah 5-6: Memproses Data dan Melatih Model (Machine Learning)
+
+Setelah data mentah berhasil dikumpulkan di bucket `raw-data` MinIO, langkah selanjutnya adalah memprosesnya menjadi dataset bersih dan membangun model prediktif berbasis Machine Learning.
+
+## Struktur Direktori
+```
+fp-bigdata
+├── api_service/
+│   └── main.py
+├── dashboard/
+│   └── app.py
+├── data_pipeline/
+│   ├── consumer.py
+│   └── producer.py
+├── data_source/
+│   └── insurance.csv
+├── frontend_ui/
+│   ├── index.html
+│   └── script.js
+├── machine_learning/
+│   ├── prepare_data.py (kita isi bagian ini)
+│   └── train_model.py  (dan ini)
+```
+
+## 1. Persiapan Data (prepare_data.py)
+
+### Lokasi:
+`machine_learning/prepare_data.py`
+
+### Fungsi:
+- Mengambil semua file JSON dari bucket `raw-data`.
+- Membersihkan data dan melakukan feature engineering.
+- Menyimpan hasil ke dalam bucket `processed-data` sebagai file `cleaned_insurance_data.csv`.
+
+### Jalankan Skrip:
+
+```bash
+python machine_learning/prepare_data.py
+```
+
+## 2. Train Model (train_model.py)
+
+### Lokasi:
+`machine_learning/train_model.py`
+
+### Fungsi:
+- Mengambil `cleaned_insurance_data.csv` dari bucket processed-data.
+- Melatih model _RandomForestRegressor_ untuk memprediksi charges.
+- Menyimpan model hasil pelatihan `(insurance_model.pkl)` ke `bucket processed-data`.
+
+### Jalankan Skrip:
+
+```bash
+python machine_learning/train_model.py
+```
+## 3. Validasi Hasil
+
+### Buka MinIO Web UI
+Akses antarmuka pengguna MinIO melalui browser: `http://localhost:9001`
+
+
+### Navigasi ke Bucket `processed-data`
+Pastikan dua file berikut telah berhasil diunggah:
+
+- **`cleaned_insurance_data.csv`** — hasil *data cleaning* dan *feature engineering*
+- **`insurance_model.pkl`** — model Machine Learning yang telah dilatih dan disimpan dalam format pickle
+
+#### Contoh Tampilan:
+
+
+### 📌 Catatan Tambahan
+- Pastikan `producer.py` dan `consumer.py` telah selesai dijalankan sehingga data mentah tersedia di bucket `raw-data`.
+- Skrip `prepare_data.py` dan `train_model.py` menggunakan:
+  - **MinIO SDK for Python** untuk komunikasi ke object storage
+  - **pandas** untuk manipulasi data
+  - **scikit-learn** untuk pelatihan dan evaluasi model
+  - **pickle** untuk serialisasi model
+- Proses transformasi data mencakup:
+  - *Handling missing values* (menghapus baris kosong)
+  - *Encoding* kolom kategorikal (`sex`, `smoker`, `region`)
+  - Normalisasi nama kolom agar konsisten
+
+---
+
+### Evaluasi Model
+
+
+
+
 ---
 
 ## Contoh Analisis
