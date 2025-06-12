@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+venv_fp_bigdata/
+.venv/
+env/
+ENV/
+
+# File spesifik proyek yang tidak perlu di-push
+*.pkl
+downloaded_model.pkl
+
+# File sistem operasi
+.DS_Store
+Thumbs.db

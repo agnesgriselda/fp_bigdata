@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediktor Biaya Asuransi</title>
+    <!-- Memuat CSS buatan kita sendiri -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="container">
+        <div class="card">
+            <h1>Prediktor Biaya Asuransi Medis</h1>
+            <form id="prediction-form">
+                <div class="form-grid">
+                    <label>Umur
+                        <input type="number" name="age" value="30" required>
+                    </label>
+                    <label>BMI
+                        <input type="number" step="0.1" name="bmi" value="25.5" required>
+                    </label>
+                </div>
+                <div class="form-grid">
+                    <label>Jenis Kelamin
+                        <select name="sex" required>
+                            <option value="male">Laki-laki</option>
+                            <option value="female">Perempuan</option>
+                        </select>
+                    </label>
+                    <label>Jumlah Anak
+                        <input type="number" name="children" value="1" required>
+                    </label>
+                </div>
+                <div class="form-grid">
+                    <label>Perokok
+                        <select name="smoker" required>
+                            <option value="no">Tidak</option>
+                            <option value="yes">Ya</option>
+                        </select>
+                    </label>
+                    <label>Wilayah
+                        <select name="region" required>
+                            <option value="southwest">Southwest</option>
+                            <option value="southeast">Southeast</option>
+                            <option value="northwest">Northwest</option>
+                            <option value="northeast">Northeast</option>
+                        </select>
+                    </label>
+                </div>
+                <button type="submit" id="submit-btn">Prediksi Biaya</button>
+            </form>
+            <div class="result-container" id="result" style="display: none;">
+                <h2>Hasil Prediksi:</h2>
+                <p id="prediction-output"></p>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
