@@ -7,7 +7,7 @@ import os
 KAFKA_BROKER = os.environ.get("KAFKA_BROKER", "localhost:9092")
 KAFKA_TOPIC = 'insurance_data_stream'
 CSV_FILE_PATH = 'data_source/insurance.csv'
-SIMULATION_DELAY_SECONDS = 1 # Jeda waktu antar pengiriman pesan
+SIMULATION_DELAY_SECONDS = 0.01 # Jeda waktu antar pengiriman pesan
 
 def create_producer():
     """Membuat dan mengembalikan instance KafkaProducer."""

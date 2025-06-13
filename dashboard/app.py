@@ -3,11 +3,11 @@ import pandas as pd
 from minio import Minio
 import io
 import plotly.express as px
-
+import os 
 # =================================================================================
 # BAGIAN 1: KONFIGURASI DAN KONEKSI (Tidak ada perubahan)
 # =================================================================================
-MINIO_ENDPOINT = "localhost:9000"
+MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "localhost:9000")
 MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
 BUCKET_NAME = "processed-data"

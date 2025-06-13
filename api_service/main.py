@@ -8,7 +8,7 @@ from minio import Minio
 
 # --- KONFIGURASI ---
 app = FastAPI(title="API Prediksi Biaya Medis - Produksi")
-MINIO_ENDPOINT = "localhost:9000"
+MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "localhost:9000")
 MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
 BUCKET_NAME = "processed-data"

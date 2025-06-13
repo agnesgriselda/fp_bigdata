@@ -3,15 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual Environments
+# Virtual Environments (mencakup semua kemungkinan nama)
 venv/
 venv_fp_bigdata/
 .venv/
 env/
 ENV/
 
-# File spesifik proyek yang tidak perlu di-push
-*.pkl
+# File sementara yang di-download oleh skrip
 downloaded_model.pkl
 
 # File sistem operasi

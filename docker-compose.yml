@@ -1,12 +1,11 @@
 version: '3.8'
 
 services:
+  # Layanan Infrastruktur Dasar (Tidak Berubah)
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
     container_name: zookeeper
     hostname: zookeeper
-    ports:
-      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -15,26 +14,23 @@ services:
     image: confluentinc/cp-kafka:7.3.2
     container_name: kafka
     hostname: kafka
-    ports:
-      - "9092:9092"
     depends_on:
       - zookeeper
+    ports:
+      - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
   minio:
     image: minio/minio:latest
     container_name: minio
     hostname: minio
     ports:
-      # Port untuk API S3
       - "9000:9000"
-      # Port untuk Web Console/UI
       - "9001:9001"
     volumes:
       - minio_data:/data
@@ -42,6 +38,67 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     command: server /data --console-address ":9001"
+
+  # --- LAYANAN APLIKASI PYTHON KITA ---
+  # Menggunakan satu layanan 'runner' untuk menjalankan semua skrip secara berurutan
+
+  app_runner:
+    # Membangun image dari Dockerfile di direktori saat ini (.)
+    build: .
+    container_name: app_runner
+    
+    # Sinkronisasi kode lokal dengan container agar perubahan langsung terlihat
+    volumes:
+      - .:/app
+      
+    # Bergantung pada kafka dan minio yang sudah dimulai
+    depends_on:
+      - kafka
+      - minio
+      
+    # Mengirimkan variabel lingkungan ke dalam container
+    # Kode Python akan mengambil nilai ini (bukan 'localhost')
+    environment:
+      - KAFKA_BROKER=kafka:9092
+      - MINIO_ENDPOINT=minio:9000
+      
+    # Memetakan port dari container ke mesin lokal kita
+    ports:
+      - "8000:8000" # Port untuk API
+      - "8501:8501" # Port untuk Dashboard
+      
+    # Perintah utama yang akan dieksekusi secara berurutan
+    command: >
+      sh -c "
+        echo '>>> Waiting for Kafka and MinIO to be ready...' &&
+        ./wait-for-kafka.sh && 
+        ./wait-for-minio.sh &&
+        echo '--- Infrastruktur Siap! ---' &&
+        
+        echo '>>> Langkah 1: Menjalankan Data Pipeline...' &&
+        echo '--> Memulai Consumer di background...' &&
+        python data_pipeline/consumer.py &
+        sleep 5 &&
+        echo '--> Memulai Producer...' &&
+        python data_pipeline/producer.py &&
+        echo '--> Producer selesai. Menunggu Consumer memproses sisa pesan...' &&
+        sleep 15 &&
+        pkill -f 'python data_pipeline/consumer.py' &&
+        echo '--- Data Pipeline Selesai ---' &&
+
+        echo '>>> Langkah 2: Menjalankan Proses Machine Learning...' &&
+        echo '--> Mempersiapkan data...' &&
+        python machine_learning/prepare_data.py &&
+        echo '--> Melatih model...' &&
+        python machine_learning/train_model.py &&
+        echo '--- Proses Machine Learning Selesai ---' &&
+
+        echo '>>> Langkah 3: Menjalankan Layanan Frontend...' &&
+        echo '--> API Service berjalan di port 8000' &&
+        echo '--> Dashboard berjalan di port 8501' &&
+        (streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0 &) &&
+        uvicorn api_service.main:app --host 0.0.0.0 --port 8000
+      "
 
 volumes:
   minio_data:
